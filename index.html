@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Scramble Infinite Master</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Word Scramble Infinite Master - Responsive</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,7 +11,7 @@
 <body>
     <div class="game-container">
         <h1>Word Scramble Master</h1>
-        <p class="subtitle">Drag & Drop letters to build English words!</p>
+        <p class="subtitle">Drag & Drop or Tap letters to build words!</p>
         
         <div class="score-board">
             <div class="score">Score: <span id="score">0</span></div>
@@ -22,19 +22,16 @@
         <div class="hint-box">
             <div class="hint-header">
                 <span><i class="fa-solid fa-lightbulb"></i> English Clue:</span>
-                <button id="speak-btn" class="speak-icon" title="Listen to pronunciation"><i class="fa-solid fa-volume-high"></i></button>
+                <button id="speak-btn" class="speak-icon" title="Listen pronunciation"><i class="fa-solid fa-volume-high"></i></button>
             </div>
             <p id="hint-text">Loading hint...</p>
         </div>
 
-        <!-- Ô trống để thả chữ cái -->
         <div id="drop-zone" class="drop-zone"></div>
-
-        <!-- Các khối chữ cái xáo trộn -->
         <div id="letter-pool" class="letter-pool"></div>
 
         <div class="action-buttons">
-            <button id="helper-btn" class="btn help"><i class="fa-solid fa-wand-magic-sparkles"></i> Gợi ý chữ cái</button>
+            <button id="helper-btn" class="btn help"><i class="fa-solid fa-wand-magic-sparkles"></i> Gợi ý</button>
             <button id="clear-btn" class="btn warning"><i class="fa-solid fa-rotate-left"></i> Làm lại</button>
             <button id="skip-btn" class="btn secondary"><i class="fa-solid fa-forward"></i> Bỏ qua</button>
         </div>
