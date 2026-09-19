@@ -3,33 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Scramble - Kéo Thả Chữ Cái</title>
+    <title>Word Scramble Infinite Master</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="game-container">
-        <h1>Ghép Chữ Tiếng Anh</h1>
-        <p class="subtitle">Kéo hoặc bấm vào các chữ cái để sắp xếp vào đúng ô trống!</p>
+        <h1>Word Scramble Master</h1>
+        <p class="subtitle">Drag & Drop letters to build English words!</p>
         
         <div class="score-board">
-            <div class="score">Điểm: <span id="score">0</span></div>
-            <div class="timer">Thời gian: <span id="timer">45</span>s</div>
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="level">Level: <span id="level">1</span></div>
+            <div class="timer">Time: <span id="timer">45</span>s</div>
         </div>
 
         <div class="hint-box">
-            <p><strong>Gợi ý:</strong> <span id="hint-text">Đang tải gợi ý...</span></p>
+            <div class="hint-header">
+                <span><i class="fa-solid fa-lightbulb"></i> English Clue:</span>
+                <button id="speak-btn" class="speak-icon" title="Listen to pronunciation"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <p id="hint-text">Loading hint...</p>
         </div>
 
-        <!-- Các ô trống để thả chữ cái vào -->
+        <!-- Ô trống để thả chữ cái -->
         <div id="drop-zone" class="drop-zone"></div>
 
-        <!-- Các khối chữ cái xáo trộn để kéo -->
+        <!-- Các khối chữ cái xáo trộn -->
         <div id="letter-pool" class="letter-pool"></div>
 
         <div class="action-buttons">
-            <button id="clear-btn" class="btn warning">Xóa lại từ đầu</button>
-            <button id="skip-btn" class="btn secondary">Bỏ qua từ này</button>
+            <button id="helper-btn" class="btn help"><i class="fa-solid fa-wand-magic-sparkles"></i> Gợi ý chữ cái</button>
+            <button id="clear-btn" class="btn warning"><i class="fa-solid fa-rotate-left"></i> Làm lại</button>
+            <button id="skip-btn" class="btn secondary"><i class="fa-solid fa-forward"></i> Bỏ qua</button>
         </div>
         
         <div id="message" class="message"></div>
