@@ -1,22 +1,40 @@
 const wordsBank = [
-    { word: "javascript", hint: "A high-level programming language core to web development" },
-    { word: "developer", hint: "A person who builds and creates computer software or applications" },
-    { word: "computer", hint: "An electronic device for storing and processing data" },
-    { word: "universe", hint: "All existing matter and space considered as a whole" },
-    { word: "adventure", hint: "An unusual and exciting, typically hazardous experience" },
-    { word: "knowledge", hint: "Information and skills gained through education or experience" },
-    { word: "challenge", hint: "A call to take part in a contest or a difficult task" },
-    { word: "sunlight", hint: "Light derived directly from the sun" },
-    { word: "keyboard", hint: "A panel of keys that operate a computer or typewriter" },
-    { word: "mountain", hint: "A large natural elevation of the earth's surface" },
-    { word: "umbrella", hint: "A device used as protection against rain or sunlight" },
-    { word: "festival", hint: "A day or period of celebration, typically for religious reasons" },
-    { word: "strategy", hint: "A plan of action designed to achieve a long-term goal" }
+    { word: "javascript", phonetic: "/ˈdʒɑːvəˌskrɪpt/", hint: "A high-level programming language core to web development." },
+    { word: "developer", phonetic: "/dɪˈvɛləpər/", hint: "A person who builds and creates computer software or applications." },
+    { word: "computer", phonetic: "/kəmˈpjuːtər/", hint: "An electronic device for storing and processing data." },
+    { word: "universe", phonetic: "/ˈjuːnɪvɜːrs/", hint: "All existing matter and space considered as a whole." },
+    { word: "adventure", phonetic: "/ədˈvɛntʃər/", hint: "An unusual and exciting, typically hazardous experience." },
+    { word: "knowledge", phonetic: "/ˈnɒlɪdʒ/", hint: "Information and skills gained through education or experience." },
+    { word: "challenge", phonetic: "/ˈtʃælɪndʒ/", hint: "A call to take part in a contest or a difficult task." },
+    { word: "sunlight", phonetic: "/ˈsʌnlaɪt/", hint: "Light derived directly from the sun." },
+    { word: "keyboard", phonetic: "/ˈkiːbɔːrd/", hint: "A panel of keys that operate a computer or typewriter." },
+    { word: "mountain", phonetic: "/ˈmaʊntɪn/", hint: "A large natural elevation of the earth's surface." },
+    { word: "umbrella", phonetic: "/ʌmˈbrɛlə/", hint: "A device used as protection against rain or sunlight." },
+    { word: "festival", phonetic: "/ˈfɛstɪvəl/", hint: "A day or period of celebration, typically for religious reasons." },
+    { word: "strategy", phonetic: "/ˈstrætədʒi/", hint: "A plan of action designed to achieve a long-term goal." },
+    { word: "discovery", phonetic: "/dɪˈskʌvəri/", hint: "The action or process of discovering or being discovered." },
+    { word: "ecosystem", phonetic: "/ˈiːkoʊsɪstəm/", hint: "A biological community of interacting organisms and their physical environment." },
+    { word: "brilliant", phonetic: "/ˈbrɪljənt/", hint: "Exceptionally clever or talented; very bright." },
+    { word: "starlight", phonetic: "/ˈstɑːrlaɪt/", hint: "Light proceeding from the stars." },
+    { word: "rainforest", phonetic: "/ˈreɪnfɔːrɪst/", hint: "A luxuriant, dense forest rich in biodiversity, found in tropical areas." },
+    { word: "horizon", phonetic: "/həˈraɪzn/", hint: "The line where the earth and sky appear to meet." },
+    { word: "galaxy", phonetic: "/ˈɡæləksi/", hint: "A system of millions or billions of stars, together with gas and dust." },
+    { word: "harmony", phonetic: "/ˈhɑːrməni/", hint: "The quality of forming a pleasing and consistent whole." },
+    { word: "freedom", phonetic: "/ˈfriːdəm/", hint: "The power or right to act, speak, or think as one wants." },
+    { word: "curiosity", phonetic: "/ˌkjʊriˈɒsɪti/", hint: "A strong desire to know or learn something." },
+    { word: "magnificent", phonetic: "/mæɡˈnɪfɪsnt/", hint: "Extremely beautiful, elaborate, or impressive." },
+    { word: "inspiration", phonetic: "/ˌɪnspəˈreɪʃn/", hint: "The process of being mentally stimulated to do or feel something." },
+    { word: "architecture", phonetic: "/ˈɑːrkɪtɛktʃər/", hint: "The art or practice of designing and constructing buildings." },
+    { word: "atmosphere", phonetic: "/ˈætməsfɪr/", hint: "The envelope of gases surrounding the earth or another planet." },
+    { word: "compassion", phonetic: "/kəmˈpæʃn/", hint: "Sympathetic pity and concern for the sufferings or misfortunes of others." },
+    { word: "destination", phonetic: "/ˌdɛstɪˈneɪʃn/", hint: "The place to which someone or something is going or being sent." },
+    { word: "electricity", phonetic: "/ɪˌlɛkˈtrɪsɪti/", hint: "A form of energy resulting from the existence of charged particles." }
 ];
 
 const dropZoneEl = document.getElementById("drop-zone");
 const letterPoolEl = document.getElementById("letter-pool");
 const hintTextEl = document.getElementById("hint-text");
+const phoneticTextEl = document.getElementById("phonetic-text");
 const scoreEl = document.getElementById("score");
 const levelEl = document.getElementById("level");
 const timerEl = document.getElementById("timer");
@@ -31,12 +49,22 @@ let score = 0;
 let level = 1;
 let timer;
 let timeLeft = 45;
-let draggedTile = null;
+let audioCtx = null;
 
-// Âm thanh Web Audio API
+// Khởi tạo AudioContext khi người dùng chạm lần đầu (Bắt buộc cho mobile / iOS / iPadOS)
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } else if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}
+
 function playSound(type) {
     try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        initAudio();
+        if (!audioCtx) return;
+        
         const osc = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
         osc.connect(gainNode);
@@ -44,27 +72,27 @@ function playSound(type) {
 
         if (type === 'correct') {
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.15);
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
             gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
             osc.start();
             osc.stop(audioCtx.currentTime + 0.3);
         } else if (type === 'wrong') {
             osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(200, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+            osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.2);
             gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
             osc.start();
             osc.stop(audioCtx.currentTime + 0.2);
         }
     } catch (e) {
-        // Tránh lỗi nếu trình duyệt chặn âm thanh tự động
+        console.log(e);
     }
 }
 
-// Phát âm chuẩn tiếng Anh
+// Hàm phát âm chuẩn trên điện thoại và máy tính bảng
 function speakWord(word) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -85,7 +113,7 @@ function startTimer() {
         if (timeLeft <= 0) {
             clearInterval(timer);
             playSound('wrong');
-            showMessage("Time's up! Loading next word...", "red");
+            showMessage("Time's up! Next stage...", "red");
             setTimeout(initGame, 1500);
         }
     }, 1000);
@@ -108,27 +136,19 @@ function initGame() {
 
     currentWordObj = wordsBank[Math.floor(Math.random() * wordsBank.length)];
     hintTextEl.textContent = currentWordObj.hint;
+    phoneticTextEl.textContent = `Pronunciation: ${currentWordObj.phonetic}`;
 
     const targetWord = currentWordObj.word;
 
-    // Tạo các ô trống nhận chữ cái
+    // Tạo ô trống
     for (let i = 0; i < targetWord.length; i++) {
         const slot = document.createElement("div");
         slot.classList.add("drop-slot");
         slot.dataset.index = i;
 
-        slot.addEventListener("dragover", (e) => e.preventDefault());
-        slot.addEventListener("drop", (e) => {
-            e.preventDefault();
-            if (draggedTile && !slot.hasChildNodes()) {
-                slot.appendChild(draggedTile);
-                draggedTile.classList.add("used");
-                checkWinCondition();
-            }
-        });
-
-        // Chạm/Click vào ô đã điền để trả chữ cái về lại kho bên dưới
+        // Xử lý chạm / click vào ô đã điền để trả chữ về kho
         slot.addEventListener("click", () => {
+            initAudio();
             if (slot.hasChildNodes()) {
                 const tile = slot.firstElementChild;
                 tile.classList.remove("used");
@@ -140,21 +160,16 @@ function initGame() {
         dropZoneEl.appendChild(slot);
     }
 
-    // Tạo các khối chữ cái
+    // Tạo các phím chữ cái xáo trộn
     const shuffledLetters = shuffle(targetWord.split(""));
     shuffledLetters.forEach((char) => {
         const tile = document.createElement("div");
         tile.classList.add("letter-tile");
         tile.textContent = char.toUpperCase();
-        tile.draggable = true;
 
-        // Sự kiện kéo cho máy tính (Laptop/PC)
-        tile.addEventListener("dragstart", () => {
-            draggedTile = tile;
-        });
-
-        // Sự kiện chạm/click cực nhạy cho điện thoại di động và máy tính bảng
+        // Tối ưu chạm và click cho điện thoại, ipad, pc
         tile.addEventListener("click", () => {
+            initAudio();
             if (tile.classList.contains("used")) return;
             const emptySlot = Array.from(dropZoneEl.children).find(slot => !slot.hasChildNodes());
             if (emptySlot) {
@@ -188,17 +203,18 @@ function checkWinCondition() {
         levelEl.textContent = level;
         clearInterval(timer);
         playSound('correct');
-        showMessage("Correct! Excellent job! 🎉", "green");
+        showMessage("Correct! Awesome job! 🎉", "green");
         speakWord(currentWordObj.word);
         setTimeout(initGame, 1800);
     } else {
         playSound('wrong');
-        showMessage("Incorrect! Try rearranging. ❌", "red");
+        showMessage("Incorrect! Try again. ❌", "red");
     }
 }
 
-// Nút trợ giúp điền 1 chữ cái đúng vào ô trống đầu tiên
+// Nút trợ giúp tự động điền 1 chữ cái đúng
 helperBtn.addEventListener("click", () => {
+    initAudio();
     const targetWord = currentWordObj.word;
     const slots = Array.from(dropZoneEl.children);
     
@@ -219,7 +235,7 @@ helperBtn.addEventListener("click", () => {
                 availableTile.classList.remove("used");
                 slots[i].appendChild(availableTile);
                 availableTile.classList.add("used");
-                messageEl.textContent = "Hint: Placed a correct letter!";
+                messageEl.textContent = "Helper used: Placed a correct letter!";
                 messageEl.style.color = "#2196F3";
                 checkWinCondition();
                 return;
@@ -229,10 +245,12 @@ helperBtn.addEventListener("click", () => {
 });
 
 speakBtn.addEventListener("click", () => {
+    initAudio();
     speakWord(currentWordObj.word);
 });
 
 clearBtn.addEventListener("click", () => {
+    initAudio();
     Array.from(dropZoneEl.children).forEach(slot => {
         if (slot.hasChildNodes()) {
             const tile = slot.firstElementChild;
@@ -244,9 +262,15 @@ clearBtn.addEventListener("click", () => {
 });
 
 skipBtn.addEventListener("click", () => {
+    initAudio();
     playSound('wrong');
-    showMessage(`Skipped! The word was: ${currentWordObj.word}`, "purple");
+    showMessage(`Skipped! Word was: ${currentWordObj.word}`, "purple");
     setTimeout(initGame, 1500);
 });
 
+// Chạm màn hình kích hoạt âm thanh cho lần đầu tiên trên iOS/Android
+document.addEventListener('touchstart', initAudio, { once: true });
+document.addEventListener('click', initAudio, { once: true });
+
+// Khởi chạy game
 initGame();
