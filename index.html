@@ -3,36 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Word Scramble Master</title>
+    <title>Word Scramble - Kéo Thả Chữ Cái</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="game-container">
-        <h1>Trò Chơi Sắp Xếp Từ Tiếng Anh</h1>
-        <p class="subtitle">Sắp xếp lại các chữ cái xáo trộn thành từ có nghĩa hoàn chỉnh!</p>
+        <h1>Ghép Chữ Tiếng Anh</h1>
+        <p class="subtitle">Kéo hoặc bấm vào các chữ cái để sắp xếp vào đúng ô trống!</p>
         
         <div class="score-board">
             <div class="score">Điểm: <span id="score">0</span></div>
-            <div class="timer">Thời gian: <span id="timer">30</span>s</div>
-        </div>
-
-        <div class="word-box">
-            <div id="scrambled-word" class="scrambled">------</div>
+            <div class="timer">Thời gian: <span id="timer">45</span>s</div>
         </div>
 
         <div class="hint-box">
             <p><strong>Gợi ý:</strong> <span id="hint-text">Đang tải gợi ý...</span></p>
         </div>
 
-        <div class="input-section">
-            <input type="text" id="user-input" placeholder="Nhập câu trả lời của bạn..." autocomplete="off">
-            <button id="submit-btn" class="btn">Kiểm tra</button>
-        </div>
+        <!-- Các ô trống để thả chữ cái vào -->
+        <div id="drop-zone" class="drop-zone"></div>
+
+        <!-- Các khối chữ cái xáo trộn để kéo -->
+        <div id="letter-pool" class="letter-pool"></div>
 
         <div class="action-buttons">
-            <button id="hint-btn" class="btn secondary">Xem gợi ý phụ</button>
-            <button id="skip-btn" class="btn warning">Bỏ qua</button>
+            <button id="clear-btn" class="btn warning">Xóa lại từ đầu</button>
+            <button id="skip-btn" class="btn secondary">Bỏ qua từ này</button>
         </div>
         
         <div id="message" class="message"></div>
