@@ -4,64 +4,116 @@ const words = [
     { word: "computer", hint: "Thiết bị điện tử dùng để tính toán, xử lý dữ liệu" },
     { word: "universe", hint: "Toàn bộ không gian, thời gian và vật chất" },
     { word: "sunlight", hint: "Ánh sáng chiếu từ mặt trời" },
-    { word: "adventure", hint: "Một chuyến đi mạo hiểm, khám phá thú vị" },
-    { word: "knowledge", hint: "Sự hiểu biết, thông tin tích lũy được" },
-    { word: "challenge", hint: "Thử thách đòi hỏi sự nỗ lực vượt qua" }
+    { word: "adventure", hint: "Chuyến đi mạo hiểm, khám phá thú vị" }
 ];
 
-const scrambledWordEl = document.getElementById("scrambled-word");
+const dropZoneEl = document.getElementById("drop-zone");
+const letterPoolEl = document.getElementById("letter-pool");
 const hintTextEl = document.getElementById("hint-text");
-const userInputEl = document.getElementById("user-input");
-const submitBtn = document.getElementById("submit-btn");
-const hintBtn = document.getElementById("hint-btn");
-const skipBtn = document.getElementById("skip-btn");
 const scoreEl = document.getElementById("score");
 const timerEl = document.getElementById("timer");
 const messageEl = document.getElementById("message");
+const clearBtn = document.getElementById("clear-btn");
+const skipBtn = document.getElementById("skip-btn");
 
 let currentWordObj = {};
 let score = 0;
 let timer;
-let timeLeft = 30;
+let timeLeft = 45;
+let draggedTile = null;
 
 function startTimer() {
     clearInterval(timer);
-    timeLeft = 30;
+    timeLeft = 45;
     timerEl.textContent = timeLeft;
     timer = setInterval(() => {
         timeLeft--;
         timerEl.textContent = timeLeft;
         if (timeLeft <= 0) {
             clearInterval(timer);
-            showMessage("Hết giờ mất rồi! Chuyển từ tiếp theo.", "red");
+            showMessage("Hết giờ mất rồi! Đang đổi từ...", "red");
             setTimeout(initGame, 1500);
         }
     }, 1000);
 }
 
-function shuffleWord(word) {
-    const arr = word.split("");
+function shuffle(array) {
+    let arr = [...array];
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    const shuffled = arr.join("");
-    // Đảm bảo từ xáo trộn khác từ gốc
-    if (shuffled === word) {
-        return shuffleWord(word);
-    }
-    return shuffled;
+    return arr;
 }
 
 function initGame() {
     startTimer();
-    userInputEl.value = "";
     messageEl.textContent = "";
-    
-    // Chọn ngẫu nhiên một từ trong danh sách
+    dropZoneEl.innerHTML = "";
+    letterPoolEl.innerHTML = "";
+
     currentWordObj = words[Math.floor(Math.random() * words.length)];
-    scrambledWordEl.textContent = shuffleWord(currentWordObj.word);
     hintTextEl.textContent = currentWordObj.hint;
+
+    const targetWord = currentWordObj.word;
+
+    // Tạo các ô trống tương ứng số chữ cái
+    for (let i = 0; i < targetWord.length; i++) {
+        const slot = document.createElement("div");
+        slot.classList.add("drop-slot");
+        slot.dataset.index = i;
+
+        // Sự kiện kéo thả vào ô trống
+        slot.addEventListener("dragover", (e) => e.preventDefault());
+        slot.addEventListener("drop", (e) => {
+            e.preventDefault();
+            if (draggedTile && !slot.hasChildNodes()) {
+                slot.appendChild(draggedTile);
+                draggedTile.classList.add("used");
+                checkWinCondition();
+            }
+        });
+
+        // Hỗ trợ bấm chạm trên điện thoại (Click để đưa vào ô trống đầu tiên trống)
+        slot.addEventListener("click", () => {
+            if (slot.hasChildNodes()) {
+                const tile = slot.firstElementChild;
+                tile.classList.remove("used");
+                letterPoolEl.appendChild(tile);
+                messageEl.textContent = "";
+            }
+        });
+
+        dropZoneEl.appendChild(slot);
+    }
+
+    // Xáo trộn chữ cái để làm bảng chọn
+    const shuffledLetters = shuffle(targetWord.split(""));
+    shuffledLetters.forEach((char, index) => {
+        const tile = document.createElement("div");
+        tile.classList.add("letter-tile");
+        tile.textContent = char.toUpperCase();
+        tile.draggable = true;
+        tile.dataset.id = index;
+
+        tile.addEventListener("dragstart", () => {
+            draggedTile = tile;
+        });
+
+        // Hỗ trợ bấm chọn nhanh trên điện thoại hoặc máy tính
+        tile.addEventListener("click", () => {
+            if (tile.classList.contains("used")) return;
+            // Tìm ô trống đầu tiên chưa có chữ
+            const emptySlot = Array.from(dropZoneEl.children).find(slot => !slot.hasChildNodes());
+            if (emptySlot) {
+                emptySlot.appendChild(tile);
+                tile.classList.add("used");
+                checkWinCondition();
+            }
+        });
+
+        letterPoolEl.appendChild(tile);
+    });
 }
 
 function showMessage(text, color) {
@@ -69,33 +121,35 @@ function showMessage(text, color) {
     messageEl.style.color = color;
 }
 
-function checkWord() {
-    const userGuess = userInputEl.value.trim().toLowerCase();
-    if (!userGuess) {
-        showMessage("Vui lòng nhập từ trả lời!", "orange");
-        return;
-    }
+function checkWinCondition() {
+    const slots = Array.from(dropZoneEl.children);
+    // Kiểm tra xem tất cả các ô đã được điền chưa
+    if (slots.some(slot => !slot.hasChildNodes())) return;
 
-    if (userGuess === currentWordObj.word) {
+    // Ghép các chữ cái lại thành từ của người dùng
+    const userWord = slots.map(slot => slot.firstElementChild.textContent.toLowerCase()).join("");
+
+    if (userWord === currentWordObj.word) {
         score += 10;
         scoreEl.textContent = score;
         clearInterval(timer);
-        showMessage("Chính xác! Làm rất tốt 🎉", "green");
+        showMessage("Chính xác! Xuất sắc lắm 🎉", "green");
         setTimeout(initGame, 1500);
     } else {
-        showMessage("Sai rồi, hãy thử lại nhé! ❌", "red");
+        showMessage("Chưa đúng rồi, hãy thử sắp xếp lại nhé! ❌", "red");
     }
 }
 
-// Sự kiện bấm nút
-submitBtn.addEventListener("click", checkWord);
-userInputEl.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") checkWord();
-});
-
-hintBtn.addEventListener("click", () => {
-    const word = currentWordObj.word;
-    showMessage(`Gợi ý chữ cái đầu: "${word[0].toUpperCase()}" và có ${word.length} chữ cái.`, "blue");
+clearBtn.addEventListener("click", () => {
+    // Trả tất cả các thẻ về khu vực ban đầu
+    Array.from(dropZoneEl.children).forEach(slot => {
+        if (slot.hasChildNodes()) {
+            const tile = slot.firstElementChild;
+            tile.classList.remove("used");
+            letterPoolEl.appendChild(tile);
+        }
+    });
+    messageEl.textContent = "";
 });
 
 skipBtn.addEventListener("click", () => {
@@ -103,5 +157,5 @@ skipBtn.addEventListener("click", () => {
     setTimeout(initGame, 1500);
 });
 
-// Chạy game lần đầu
+// Khởi chạy trò chơi lần đầu
 initGame();
