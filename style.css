@@ -1,0 +1,141 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+.game-container {
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #718096;
+    margin-bottom: 20px;
+}
+
+.score-board {
+    display: flex;
+    justify-content: space-between;
+    background: #edf2f7;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #2d3748;
+}
+
+.word-box {
+    background: #ebf8ff;
+    border: 2px dashed #3182ce;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.scrambled {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    color: #2b6cb0;
+    text-transform: uppercase;
+}
+
+.hint-box {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #4a5568;
+    background: #fffaf0;
+    border-left: 4px solid #dd6b20;
+    padding: 10px;
+    text-align: left;
+    border-radius: 4px;
+}
+
+.input-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+    border-color: #3182ce;
+}
+
+.btn {
+    padding: 12px 20px;
+    background: #3182ce;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn:hover {
+    background: #2b6cb0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn.secondary {
+    background: #4a5568;
+    flex: 1;
+}
+
+.btn.secondary:hover {
+    background: #2d3748;
+}
+
+.btn.warning {
+    background: #e2e8f0;
+    color: #4a5568;
+    flex: 1;
+}
+
+.btn.warning:hover {
+    background: #cbd5e0;
+}
+
+.message {
+    margin-top: 15px;
+    font-weight: 600;
+    font-size: 14px;
+    min-height: 20px;
+}
