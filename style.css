@@ -3,9 +3,9 @@
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-    /* Chống bôi đen văn bản vô ý trên điện thoại khi kéo */
     -webkit-user-select: none;
     user-select: none;
+    -webkit-touch-callout: none;
 }
 
 body {
@@ -15,12 +15,12 @@ body {
     justify-content: center;
     align-items: center;
     color: #fff;
-    padding: 10px; /* Tránh tràn viền trên màn hình điện thoại nhỏ */
+    padding: 10px;
 }
 
 .game-container {
     background: #ffffff;
-    padding: 20px 25px;
+    padding: 20px;
     border-radius: 20px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
     width: 100%;
@@ -30,15 +30,15 @@ body {
 }
 
 h1 {
-    font-size: 22px;
+    font-size: 20px;
     color: #1f4068;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .subtitle {
-    font-size: 12px;
+    font-size: 11px;
     color: #666;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .score-board {
@@ -48,7 +48,7 @@ h1 {
     padding: 8px 12px;
     border-radius: 10px;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 12px;
     margin-bottom: 12px;
     color: #1f4068;
 }
@@ -57,7 +57,7 @@ h1 {
     margin-bottom: 15px;
     background: #eef9ff;
     border-left: 4px solid #2196F3;
-    padding: 10px;
+    padding: 10px 12px;
     text-align: left;
     border-radius: 4px;
     color: #0d47a1;
@@ -67,7 +67,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     font-weight: 600;
     font-size: 12px;
 }
@@ -77,32 +77,44 @@ h1 {
     color: white;
     border: none;
     border-radius: 50%;
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.2s;
+    font-size: 14px;
+}
+
+.speak-icon:active {
+    transform: scale(0.9);
 }
 
 #hint-text {
     font-size: 13px;
     font-style: italic;
+    margin-bottom: 4px;
+}
+
+.phonetic-display {
+    font-size: 12px;
+    color: #0277bd;
+    font-weight: 600;
 }
 
 .drop-zone {
     display: flex;
     justify-content: center;
     gap: 6px;
-    margin-bottom: 20px;
-    min-height: 50px;
+    margin-bottom: 18px;
+    min-height: 44px;
     flex-wrap: wrap;
 }
 
 .drop-slot {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border: 2px dashed #ccc;
     border-radius: 8px;
     display: flex;
@@ -111,7 +123,7 @@ h1 {
     font-size: 16px;
     font-weight: 700;
     background: #fafafa;
-    transition: all 0.2s;
+    color: #333;
 }
 
 .letter-pool {
@@ -120,12 +132,12 @@ h1 {
     gap: 6px;
     margin-bottom: 18px;
     flex-wrap: wrap;
-    min-height: 45px;
+    min-height: 40px;
 }
 
 .letter-tile {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     background: #1f4068;
     color: white;
     font-size: 16px;
@@ -136,8 +148,7 @@ h1 {
     justify-content: center;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    touch-action: manipulation; /* Giúp thao tác chạm trên điện thoại mượt không bị độ trễ zoom */
-    transition: transform 0.1s, background 0.2s;
+    touch-action: manipulation;
 }
 
 .letter-tile.used {
@@ -154,14 +165,13 @@ h1 {
 
 .btn {
     flex: 1;
-    padding: 8px 5px;
+    padding: 10px 4px;
     border: none;
     border-radius: 8px;
     font-weight: 600;
     font-size: 11px;
     cursor: pointer;
     color: white;
-    transition: opacity 0.2s;
 }
 
 .btn.help { background: #e91e63; }
@@ -169,13 +179,12 @@ h1 {
 .btn.secondary { background: #757575; }
 
 .message {
-    margin-top: 12px;
+    margin-top: 10px;
     font-weight: 600;
     font-size: 13px;
     min-height: 18px;
 }
 
-/* Tối ưu riêng cho máy tính bảng và Laptop (Màn hình lớn hơn) */
 @media (min-width: 768px) {
     .game-container {
         max-width: 520px;
@@ -190,6 +199,6 @@ h1 {
     }
     .btn {
         padding: 10px;
-        font-size: 13px;
+        font-size: 12px;
     }
 }
